@@ -1,73 +1,54 @@
-#yo boy
-@p1_lives = 3
-@p2_lives = 3
-@p1_points = 0
-@p2_points = 0
+require_relative 'Player'
+require_relative 'Question'
 
-def random_number
-	number = rand(20)
-end 
-
-def generate_question
-	@num1 = random_number
-	@num2 = random_number
-	question = "What does #{@num1} + #{@num2} equal"
-end
-
-def generate_answer
-	@answer = @num1 + @num2
-end
-
-def check_p1(player_answer)
-	if @answer != player_answer
-		puts "WRONG"
-		puts "Player 1 remaining lives: #{@p1_lives -= 1}"
-	else
-		puts "CORRECT"
-		puts "Player 1 points: #{@p1_points += 1}"
-	end
-end
-
-def check_p2(player_answer)
-	if @answer != player_answer
-		puts "WRONG"
-		puts "Player 2 remaining lives: #{@p2_lives -= 1}"
-	else
-		puts "CORRECT"
-		puts "Player 2 points: #{@p2_points += 1}"
-	end
-end
-
-def get_player_answer
-	answer=gets.chomp.to_i
-end
-
-begin
-	alive = true
-	if @p1_lives> 0 && @p2_lives > 0
-		puts "PLAYER 1 TURN"
-		puts generate_question
-		generate_answer
-		print "Answer: "
-		check_p1(get_player_answer)
+class Game
+	def start
+		player_1 = Player.new
+		player_2 = Player.new
+		question = Question.new
+		print "Player 1, enter your name: "
+		player_1.get_player_name
+		print "Player 2, enter your name: "
+		player_2.get_player_name
 		puts " "
-	else
-		alive = false
+		alive = true
+		loop do
+			question.generate_new
+			puts "#{player_1.name}, #{question.new}"
+			print "Answer: "
+			player_1.get_answer
+			puts " "
+			results = player_1.check_answer?(question.answer, player_1.answer)
+			player_1.adjust(results)
+			puts "#{player_1.name}'s score: #{player_1.score}"
+			puts "Remaining lives: #{player_1.lives}"
+			puts " "
+			if player_1.lives == 0
+				break
+			end
+			question.generate_new
+			puts "#{player_2.name}, #{question.new}"
+			print "Answer: "
+			player_2.get_answer
+			puts " "
+			results = player_2.check_answer?(question.answer, player_2.answer)
+			player_2.adjust(results)
+			puts "#{player_2.name}'s score: #{player_2.score}"
+			puts "Remaining lives: #{player_2.lives}"
+			puts " "
+			if player_2.lives == 0
+				break
+			end
+		end
+		if player_1.lives!=0
+			puts "#{player_1.name} WINS! Final score: #{player_1.score}"
+		else
+			puts "#{player_2.name} WINS! Final score: #{player_2.score}"
+		end
+		puts "Goodbye"
 	end
-	if @p2_lives > 0 && @p1_lives> 0
-		puts "PLAYER 2 TURN"
-		puts generate_question
-		generate_answer
-		print "Answer: "
-		check_p2(get_player_answer)
-		puts " "
-	else
-		alive = false
-	end
-end while alive 
-if @p1_lives > 0
-	puts "Player 1 WINS! Final score: #{@p1_points}"
-else
-	puts "Player 2 WINS! Final score: #{@p2_points}"
 end
-puts "Goodbye"
+
+game = Game.new
+game.start
+
