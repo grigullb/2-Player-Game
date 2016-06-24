@@ -10,10 +10,23 @@ class Question
 	attr_accessor :new
 
   def generate_new
-		@num1 = random_number
-		@num2 = random_number
-		@answer = @num1 + @num2
-		@new = "What does #{@num1} + #{@num2} equal?"
+  	type = rand(3)
+  	if type == 0
+			@num1 = random_number
+			@num2 = random_number
+			@answer = @num1 + @num2
+			@new = "What does #{@num1} + #{@num2} equal?"
+		elsif type == 1
+			@num1 = random_number
+			@num2 = random_number
+			@answer = @num1 - @num2
+			@new = "What does #{@num1} - #{@num2} equal?"
+		else
+			@num1 = random_number
+			@num2 = random_number
+			@answer = @num1 * @num2
+			@new = "What does #{@num1} * #{@num2} equal?"
+		end
 	end
 
 
