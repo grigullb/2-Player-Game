@@ -7,6 +7,7 @@ class Game
 		@player_1 = Player.new
 		@player_2 = Player.new
 		@question = Question.new
+		@current_player = @player_1
 	end
 
 	def enter_names
@@ -17,27 +18,27 @@ class Game
 		puts " "
 	end
 
-	def ask_player(player)
+	def ask_player
 			@question.generate_new
-			puts "#{player.name}, #{@question.new}"
+			puts "#{@current_player.name}, #{@question.new}"
 			print "Answer: "
-			player.get_answer
+			@current_player.get_answer
 			puts " "
 	end
 
-	def check_answer(player)
-		results = player.check_answer?(@question.answer, player.answer)
+	def check_answer
+		results = @current_player.check_answer?(@question.answer, @current_player.answer)
 	end
 
-	def update_score(player, results)
-		player.adjust(results)
+	def update_score(results)
+		@current_player.adjust(results)
 		if results
-				puts "#{player.name}'s score: #{player.score}".green
-				puts "Remaining lives: #{player.lives}".green
+				puts "#{@current_player.name}'s score: #{@current_player.score}".green
+				puts "Remaining lives: #{@current_player.lives}".green
 				puts " "
 			else
-				puts "#{player.name}'s score: #{player.score}".red
-				puts "Remaining lives: #{player.lives}".red
+				puts "#{@current_player.name}'s score: #{@current_player.score}".red
+				puts "Remaining lives: #{@current_player.lives}".red
 				puts " "
 			end
 	end
@@ -66,20 +67,31 @@ class Game
 		@player_2.lives = 3
 		@player_1.score = 0
 		@player_2.score = 0
+		@current_player = @player_1
+	end
+
+	def switch(player)
+		if player == @player_1
+			@current_player = @player_2
+		else
+			@current_player = @player_1
+		end
 	end
 
 	def start
 		loop do
-			ask_player(@player_1)
-			update_score(@player_1, check_answer(@player_1))
-			if @player_1.lives == 0
+			ask_player
+			update_score(check_answer)
+			if @current_player.lives == 0
 				break
 			end
-			ask_player(@player_2)
-			update_score(@player_2, check_answer(@player_2))
-			if @player_2.lives == 0
+			switch(@current_player)
+			ask_player
+			update_score(check_answer)
+			if @current_player.lives == 0
 				break
 			end
+			switch(@current_player)
 		end
 	end
 
