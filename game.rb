@@ -1,5 +1,6 @@
 require_relative 'Player'
 require_relative 'Question'
+require 'colorize'
 
 class Game
 	def start
@@ -20,9 +21,15 @@ class Game
 			puts " "
 			results = player_1.check_answer?(question.answer, player_1.answer)
 			player_1.adjust(results)
-			puts "#{player_1.name}'s score: #{player_1.score}"
-			puts "Remaining lives: #{player_1.lives}"
-			puts " "
+			if results
+				puts "#{player_1.name}'s score: #{player_1.score}".green
+				puts "Remaining lives: #{player_1.lives}".green
+				puts " "
+			else
+				puts "#{player_1.name}'s score: #{player_1.score}".red
+				puts "Remaining lives: #{player_1.lives}".red
+				puts " "
+			end
 			if player_1.lives == 0
 				break
 			end
@@ -33,17 +40,23 @@ class Game
 			puts " "
 			results = player_2.check_answer?(question.answer, player_2.answer)
 			player_2.adjust(results)
-			puts "#{player_2.name}'s score: #{player_2.score}"
-			puts "Remaining lives: #{player_2.lives}"
-			puts " "
+			if results
+				puts "#{player_2.name}'s score: #{player_2.score}".green
+				puts "Remaining lives: #{player_2.lives}".green
+				puts " "
+			else
+				puts "#{player_2.name}'s score: #{player_2.score}".red
+				puts "Remaining lives: #{player_2.lives}".red
+				puts " "
+			end
 			if player_2.lives == 0
 				break
 			end
 		end
 		if player_1.lives!=0
-			puts "#{player_1.name} WINS! Final score: #{player_1.score}"
+			puts "#{player_1.name} WINS! Final score: #{player_1.score}".green
 		else
-			puts "#{player_2.name} WINS! Final score: #{player_2.score}"
+			puts "#{player_2.name} WINS! Final score: #{player_2.score}".green
 		end
 		puts "Goodbye"
 	end
@@ -51,4 +64,3 @@ end
 
 game = Game.new
 game.start
-
