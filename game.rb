@@ -1,4 +1,4 @@
-
+#yo boy
 @p1_lives = 3
 @p2_lives = 3
 @p1_points = 0
